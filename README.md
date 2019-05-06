@@ -30,3 +30,4 @@ Browse http://localhost:8080 and confirm the web page shows "Home Page".
 - https://hackernoon.com/golang-docker-microservices-for-enterprise-model-5c79addfa811
 - https://docs.docker.com/samples/library/golang/
 - https://docs.docker.com/develop/develop-images/multistage-build/
+- https://medium.com/@petomalina/using-go-mod-download-to-speed-up-golang-docker-builds-707591336888

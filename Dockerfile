@@ -1,7 +1,7 @@
 FROM golang:1.12.4-alpine AS builder
-# Create application folder in $GOPATH (/go/src) so `go get ./...` 
+# Create application folder in $GOPATH so `go get ./...` 
 # works as expected below
-WORKDIR /go/src/app
+WORKDIR $GOPATH/src/app
 # Install git to let `go get` fetch dependencies
 RUN apk add --no-cache git
 # Copy source to working directory
@@ -16,11 +16,11 @@ COPY main.go ./
 # parameter to let the compiler package all the libraries required 
 # by the application into the binary.
 RUN go get ./... \
- && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main
+ && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /go/bin/main
 
 # ---
 
 FROM scratch AS production
-COPY --from=builder /go/src/app/main /
+COPY --from=builder /go/bin/main /go/bin/main
 EXPOSE 8080
-CMD ["/main"]
+ENTRYPOINT ["/go/bin/main"]
