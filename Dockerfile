@@ -1,11 +1,19 @@
-FROM golang:1.12.4-alpine AS builder
+# Accept the Go version for the image as a build argument.
+# Default to Go 1.12
+ARG GO_VERSION=1.12
+
+FROM golang:${GO_VERSION}-alpine AS builder
+
 # Create application folder in $GOPATH so `go get ./...` 
 # works as expected below
 WORKDIR $GOPATH/src/app
+
 # Install git to let `go get` fetch dependencies
 RUN apk add --no-cache git
+
 # Copy source to working directory
 COPY main.go ./
+
 # Fetch all dependencies and cross compile application
 # 
 # Note the use of `CGO_ENABLED` to let the Go compiler link the 
