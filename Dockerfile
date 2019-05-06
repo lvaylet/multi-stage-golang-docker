@@ -4,17 +4,28 @@ ARG GO_VERSION=1.12
 
 FROM golang:${GO_VERSION}-alpine AS builder
 
-# Create application folder in $GOPATH so `go get ./...` 
-# works as expected below
-WORKDIR $GOPATH/src/app
+# Create a working directory, not necessarily under $GOPATH/src
+# thanks to Go modules being used to handle the dependencies.
+WORKDIR /usr/src/app
 
-# Install git to let `go get` fetch dependencies
+# Install git to let `go mod download` fetch dependencies
 RUN apk add --no-cache git
 
-# Copy source to working directory
-COPY main.go ./
+# Download all the dependencies specified in the `go.{mod,sum}`
+# files. Because of how the layer caching system works in Docker,
+# the `go mod download` command will *only* be executed when one
+# of the `go.{mod,sum}` files changes (or when another Docker
+# instruction is added before this line). As these files do not
+# change frequently (unless you are updating the dependencies),
+# they can be simply cached to speed up the build.
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
 
-# Fetch all dependencies and cross compile application
+# Bundle source code to working directory
+COPY main.go .
+
+# Cross compile the application
 # 
 # Note the use of `CGO_ENABLED` to let the Go compiler link the 
 # libraries on the system. It is enabled by default for native 
@@ -23,8 +34,7 @@ COPY main.go ./
 # nothing in it (not even libraries). We need to disable the CGO 
 # parameter to let the compiler package all the libraries required 
 # by the application into the binary.
-RUN go get ./... \
- && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /go/bin/main
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o /go/bin/main
 
 # ---
 
