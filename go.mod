@@ -9,7 +9,7 @@ require (
 	github.com/boltdb/bolt v1.3.1 // indirect
 	github.com/golang/dep v0.5.1 // indirect
 	github.com/golang/protobuf v1.3.1 // indirect
-	github.com/gorilla/websocket v1.4.1
+	github.com/gorilla/websocket v1.5.0
 	github.com/jmank88/nuts v0.3.0 // indirect
 	github.com/nightlyone/lockfile v0.0.0-20180618180623-0ad87eef1443 // indirect
 	github.com/pelletier/go-toml v1.4.0 // indirect
