@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/Masterminds/semver v1.4.2 // indirect
-	github.com/Masterminds/vcs v1.13.0 // indirect
+	github.com/Masterminds/vcs v1.13.2 // indirect
 	github.com/armon/go-radix v1.0.0 // indirect
 	github.com/boltdb/bolt v1.3.1 // indirect
 	github.com/golang/dep v0.5.1 // indirect
